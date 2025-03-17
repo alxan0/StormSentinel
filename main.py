@@ -17,7 +17,7 @@ async def main():
     while True:
         # Add other tasks that you might need to do in the loop
         await asyncio.sleep(5)
-        print('This message will be printed every 5 seconds')
+        
         
 
 # Create an Event Loop
