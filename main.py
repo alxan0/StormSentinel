@@ -9,6 +9,9 @@ async def main():
         print('Exiting program.')
         return
     
+    # Get a first set of data
+    await website.init_app_state() # TODO add error check
+
     # Start the server and run the event loop
     print('Setting up server')
     server = asyncio.start_server(website.handle_client, "0.0.0.0", 80)
@@ -16,7 +19,6 @@ async def main():
     
     while True:
         await asyncio.sleep(5)
-
 
 # Create an Event Loop
 loop = asyncio.get_event_loop()
