@@ -5,8 +5,10 @@ from utime import sleep
 def init_wifi(ssid, password):
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
+
     # Connect to your network
     wlan.connect(ssid, password)
+
     # Wait for Wi-Fi connection
     connection_timeout = 10
     while connection_timeout > 0:
@@ -16,6 +18,7 @@ def init_wifi(ssid, password):
         connection_timeout -= 1
         print('Waiting for Wi-Fi connection...')
         sleep(1)
+
     # Check if connection is successful
     if wlan.status() != 3:
         print('Failed to connect to Wi-Fi')

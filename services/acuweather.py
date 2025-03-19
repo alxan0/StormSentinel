@@ -1,7 +1,7 @@
 import asyncio
 import urequests
 import json
-from secrets import ACU_API_KEY as API_KEY
+from config.secrets import ACU_API_KEY as API_KEY
 
 # Get the location key from coordinates
 async def get_location_key(latitude, longitude):

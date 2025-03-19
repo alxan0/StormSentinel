@@ -1,8 +1,8 @@
 import asyncio
 import socket
 from machine import Pin
-from webpage import webpage
-from acuweather import get_weather
+from utils.webpage import webpage
+from services.acuweather import get_weather
 
 # Create several LEDs
 led_control = Pin("LED", Pin.OUT)
