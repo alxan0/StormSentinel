@@ -23,7 +23,7 @@ app_state = {
 
 # Fetch first set of data
 async def init_app_state():
-    app_state["latitude"], app_state["longitude"] = load_coordinates()
+    app_state["latitude"], app_state["longitude"], _ = await load_coordinates()
     if app_state["latitude"] and app_state["longitude"] is not 0:
         app_state["acu_temp"] = await get_weather(app_state["latitude"], app_state["longitude"])
     else:
@@ -68,11 +68,11 @@ async def handle_client(reader, writer):
         try:
             query_string = request.split("?")[1]
             coordinates = dict(param.split("=") for param in query_string.split("&") if "=" in param)
-            save_coordinates(coordinates)
+            await save_coordinates(coordinates)
         except IndexError:
             print("No value provided.")
 
-        app_state["latitude"], app_state["longitude"] = load_coordinates()
+        app_state["latitude"], app_state["longitude"], _ = await load_coordinates()
 
         if app_state["latitude"] and app_state["longitude"] is 0:
             app_state["acu_temp"] = "Invalid or missing coordinates"
