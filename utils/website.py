@@ -9,7 +9,7 @@ from utils.location import save_coordinates, load_coordinates
 # Create several LEDs
 led_control = Pin("LED", Pin.OUT)
 
-# Centralized data dictionary
+# AcuWeather Data
 acu_data = {
     "acu_temp": 300,
     "acu_condition": "S",
@@ -130,7 +130,7 @@ async def handle_client(reader, writer):
 
     writer.write(f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n{response}".encode())
 
-    #Close the connection
+    # Close the connection
     await writer.drain()
     await writer.wait_closed()
     print("Client Disconnected")
