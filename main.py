@@ -1,24 +1,24 @@
 import asyncio
 from utime import sleep
-from wifi import init_wifi
-import website
-import secrets
+from core.wifi import init_wifi
+import utils.website as website
+import config.secrets as secrets
 
 async def main():    
     if not init_wifi(secrets.ssid, secrets.password):
         print('Exiting program.')
         return
     
+    # Get a first set of data
+    await website.init_app_state() # TODO add error check
+
     # Start the server and run the event loop
     print('Setting up server')
     server = asyncio.start_server(website.handle_client, "0.0.0.0", 80)
     asyncio.create_task(server)
     
     while True:
-        # Add other tasks that you might need to do in the loop
         await asyncio.sleep(5)
-        
-        
 
 # Create an Event Loop
 loop = asyncio.get_event_loop()

@@ -1,7 +1,8 @@
 import asyncio
 import urequests
 import json
-from secrets import ACU_API_KEY as API_KEY
+from config.secrets import ACU_API_KEY as API_KEY
+from utils.location import load_coordinates
 
 # Get the location key from coordinates
 async def get_location_key(latitude, longitude):
@@ -39,7 +40,15 @@ async def get_temperature(location_key):
 
 # Combine the two functions
 async def get_weather(latitude, longitude):
-    location_key = await get_location_key(latitude, longitude)
+    
+    _, _,  saved_location_key = await load_coordinates()
+    
+    if(saved_location_key):
+        location_key = saved_location_key
+        print(">>>>Location_key loaded")
+    else:
+        location_key = await get_location_key(latitude, longitude)
+
     if location_key:
         return await get_temperature(location_key)
     else:
