@@ -3,25 +3,34 @@ import socket
 from machine import Pin
 from utils.webpage import webpage
 from services.acuweather import get_weather
+from services.geminiAsk import ask_gemini
 from utils.location import save_coordinates, load_coordinates
 
 # Create several LEDs
 led_control = Pin("LED", Pin.OUT)
 
 # Centralized data dictionary
-app_state = {
-    "state": "OFF",
-    "latitude": 0,
-    "longitude": 0,
+acu_data = {
     "acu_temp": 300,
     "acu_condition": "S",
     "acu_humidity": 100,
     "acu_wind_speed": 40,
     "acu_chance_of_rain": -10,
-    "acu_precipitation_type": "None",
+    "acu_precipitation_type": "None"
+}
+
+# Local Sensor Data
+local_data = {
     "sensor_temp": 300,
     "sensor_humidity": 2,
-    "sensor_co2": 1,
+    "sensor_co2": 1
+}
+
+# Application State Data
+app_state = {
+    "state": "OFF",
+    "latitude": 0,
+    "longitude": 0,
     "gemini_insights": "a"
 }
 
@@ -29,12 +38,9 @@ app_state = {
 async def init_app_state():
     app_state["latitude"], app_state["longitude"], _ = await load_coordinates()
     if app_state["latitude"] != 0 and app_state["longitude"] != 0:
-        acu_data = await get_weather(app_state["latitude"], app_state["longitude"])
-        
-        # Map detailed weather data
-        app_state.update(acu_data)
+        acu_data.update(await get_weather(app_state["latitude"], app_state["longitude"]))
     else:
-        app_state["acu_temp"] = "Invalid or missing coordinates"
+        acu_data["acu_temp"] = "Invalid or missing coordinates"
 
 
 # Asynchronous function to handle client's requests
@@ -83,43 +89,44 @@ async def handle_client(reader, writer):
         app_state["latitude"], app_state["longitude"], _ = await load_coordinates()
 
         if app_state["latitude"] and app_state["longitude"] is 0:
-            app_state["acu_temp"] = "Invalid or missing coordinates"
+            acu_data["acu_temp"] = "Invalid or missing coordinates"
     
     # Get weather from the AcuWeather API
     elif request.startswith('/getweather?'):
         try:
             if app_state["latitude"] and app_state["longitude"] is not 0:
-                acu_data = await get_weather(app_state["latitude"], app_state["longitude"])
-        
-                app_state.update(acu_data)
+                acu_data.update(await get_weather(app_state["latitude"], app_state["longitude"]))
             else:
-                app_state["acu_temp"] = "Invalid or missing coordinates"
+                acu_data["acu_temp"] = "Invalid or missing coordinates"
         except IndexError:
             print("No value provided.")
+    
+     # Ask Gemini about the weather
     elif request.startswith('/getinsight?'):
-        if app_state["acu_temp"] != 300:
-            geminiResponse = await ask_gemini(app_state["acu_temp"])
+        if acu_data["acu_temp"] != 300:
+            geminiResponse = await ask_gemini(acu_data)
         else:
             geminiResponse = "Va rog sa generati temperatura mai intai"
             print(geminiResponse)
         app_state["gemini_insights"] = geminiResponse
         print(geminiResponse)
+
     # Logic for serving the main website
     response = webpage(
-    app_state["state"],
-    app_state["latitude"], 
-    app_state["longitude"],
-    app_state["acu_temp"],
-    app_state["acu_condition"],
-    app_state["acu_humidity"],        
-    app_state["acu_wind_speed"],         
-    app_state["acu_chance_of_rain"],     
-    app_state["acu_precipitation_type"],
-    app_state["sensor_temp"],
-    app_state["sensor_humidity"],
-    app_state["sensor_co2"],
-    app_state["gemini_insights"]
-)
+        app_state["state"],
+        app_state["latitude"], 
+        app_state["longitude"],
+        acu_data["acu_temp"],
+        acu_data["acu_condition"],
+        acu_data["acu_humidity"],        
+        acu_data["acu_wind_speed"],         
+        acu_data["acu_chance_of_rain"],     
+        acu_data["acu_precipitation_type"],
+        local_data["sensor_temp"],
+        local_data["sensor_humidity"],
+        local_data["sensor_co2"],
+        app_state["gemini_insights"]
+    )
 
     writer.write(f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n{response}".encode())
 
