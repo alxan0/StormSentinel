@@ -14,20 +14,28 @@ app_state = {
     "latitude": 0,
     "longitude": 0,
     "acu_temp": 300,
+    "acu_condition": "S",
+    "acu_humidity": 100,
+    "acu_wind_speed": 40,
+    "acu_chance_of_rain": -10,
+    "acu_precipitation_type": "None",
     "sensor_temp": 300,
     "sensor_humidity": 2,
     "sensor_co2": 1,
-    "acu_condition": "S",
     "gemini_insights": "a"
 }
 
 # Fetch first set of data
 async def init_app_state():
     app_state["latitude"], app_state["longitude"], _ = await load_coordinates()
-    if app_state["latitude"] and app_state["longitude"] is not 0:
-        app_state["acu_temp"] = await get_weather(app_state["latitude"], app_state["longitude"])
+    if app_state["latitude"] != 0 and app_state["longitude"] != 0:
+        acu_data = await get_weather(app_state["latitude"], app_state["longitude"])
+        
+        # Map detailed weather data
+        app_state.update(acu_data)
     else:
         app_state["acu_temp"] = "Invalid or missing coordinates"
+
 
 # Asynchronous function to handle client's requests
 async def handle_client(reader, writer):
@@ -81,7 +89,9 @@ async def handle_client(reader, writer):
     elif request.startswith('/getweather?'):
         try:
             if app_state["latitude"] and app_state["longitude"] is not 0:
-                app_state["acu_temp"] = await get_weather(app_state["latitude"], app_state["longitude"]) # TODO check if the coord. exists
+                acu_data = await get_weather(app_state["latitude"], app_state["longitude"])
+        
+                app_state.update(acu_data)
             else:
                 app_state["acu_temp"] = "Invalid or missing coordinates"
         except IndexError:
@@ -89,16 +99,21 @@ async def handle_client(reader, writer):
     
     # Logic for serving the main website
     response = webpage(
-            app_state["state"],
-            app_state["latitude"], 
-            app_state["longitude"],
-            app_state["acu_temp"],
-            app_state["acu_condition"],
-            app_state["sensor_temp"],
-            app_state["sensor_humidity"],
-            app_state["sensor_co2"],
-            app_state["gemini_insights"]
-        )
+    app_state["state"],
+    app_state["latitude"], 
+    app_state["longitude"],
+    app_state["acu_temp"],
+    app_state["acu_condition"],
+    app_state["acu_humidity"],        
+    app_state["acu_wind_speed"],         
+    app_state["acu_chance_of_rain"],     
+    app_state["acu_precipitation_type"],
+    app_state["sensor_temp"],
+    app_state["sensor_humidity"],
+    app_state["sensor_co2"],
+    app_state["gemini_insights"]
+)
+
     writer.write(f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n{response}".encode())
 
     #Close the connection
