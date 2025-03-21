@@ -96,7 +96,14 @@ async def handle_client(reader, writer):
                 app_state["acu_temp"] = "Invalid or missing coordinates"
         except IndexError:
             print("No value provided.")
-    
+    elif request.startswith('/getinsight?'):
+        if app_state["acu_temp"] != 300:
+            geminiResponse = await ask_gemini(app_state["acu_temp"])
+        else:
+            geminiResponse = "Va rog sa generati temperatura mai intai"
+            print(geminiResponse)
+        app_state["gemini_insights"] = geminiResponse
+        print(geminiResponse)
     # Logic for serving the main website
     response = webpage(
     app_state["state"],
