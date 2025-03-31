@@ -9,8 +9,6 @@ def inject_state(acu, local):
 async def display_loop(tft):
     while True:
         clear_screen(tft)
-
-        # Clear + Title (optional, depending on your driver)
         show_readings(tft, "Storm Sentinel", 0, 0)
 
         # === AccuWeather Section ===

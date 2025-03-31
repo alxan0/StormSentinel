@@ -1,5 +1,3 @@
-import time
-import math
 from lib.ST7735 import TFT
 from lib.sysfont import sysfont
 
