@@ -11,7 +11,7 @@ import config.secrets as secrets
 acu_data = {
     "acu_temp": 300,
     "acu_condition": "S",
-    "acu_humidity": 100,
+    "acu_humidity": -1,
     "acu_wind_speed": 40,
     "acu_chance_of_rain": -10,
     "acu_precipitation_type": "None"
