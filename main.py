@@ -3,6 +3,7 @@ from utime import sleep
 from core.wifi import init_wifi
 from core.display import init_display
 from services.display_service import show_boot_screen
+import services.sensors.sensors_manager as sensors_manager
 import utils.display_manager as display_manager
 import utils.website as website
 import config.secrets as secrets
@@ -21,7 +22,8 @@ acu_data = {
 local_data = {
     "sensor_temp": 300,
     "sensor_humidity": 2,
-    "sensor_co2": 1
+    "sensor_co2": 1,
+    "sensor_dust": -1
 }
 
 async def main():    
@@ -30,8 +32,10 @@ async def main():
         return
     
     tft = init_display()
-    show_boot_screen(tft)
     
+    sensors_manager.inject_state(local_data)
+    asyncio.create_task(sensors_manager.read_all_loop())
+
     # Later update readings
     # Get a first set of data
     website.inject_state(acu_data, local_data)
@@ -42,6 +46,7 @@ async def main():
     server = asyncio.start_server(website.handle_client, "0.0.0.0", 80)
     asyncio.create_task(server)
     
+    show_boot_screen(tft)
     display_manager.inject_state(acu_data, local_data)
     asyncio.create_task(display_manager.display_loop(tft))
 
