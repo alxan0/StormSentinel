@@ -31,25 +31,22 @@ async def ask_gemini(acu_data):
             ]
         }
 
-        json_data = ujson.dumps(data).encode('utf-8')  # Convertim corect JSON-ul
-        print("Trimit către API:", json_data)  # Debugging
+        json_data = ujson.dumps(data).encode('utf-8')
+        # print("Send to API:", json_data)  # Debugging
 
-        # Facem REQUEST CĂTRE API (LIPSEA ACEASTĂ LINIE)
         response = urequests.post(GEMINI_URL, headers=headers, data=json_data)
-
-        # Verificăm răspunsul API
-        print("Răspuns brut API:", response.text)  # Debugging
+        print("GeminiAPI:", response.text)  # Debugging
 
         result = response.json()
         response.close()
 
-        # Extragem răspunsul AI
+        # Extract the reply
         if "candidates" in result:
             reply = result["candidates"][0]["content"]["parts"][0]["text"]
-        #  print("🔹 Răspuns Gemini:", reply)
+        #  print("Gemini's reply:", reply)
         else:
-            print("Eroare în răspunsul API:", result)
+            print("Gemini API error:", result)
         return reply
     except Exception as e:
-        print("Eroare:", e)
+        print("Error in geminiAsk:", e)
 
