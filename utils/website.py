@@ -9,23 +9,6 @@ from utils.location import save_coordinates, load_coordinates
 # Create several LEDs
 led_control = Pin("LED", Pin.OUT)
 
-# AcuWeather Data
-acu_data = {
-    "acu_temp": 300,
-    "acu_condition": "S",
-    "acu_humidity": 100,
-    "acu_wind_speed": 40,
-    "acu_chance_of_rain": -10,
-    "acu_precipitation_type": "None"
-}
-
-# Local Sensor Data
-local_data = {
-    "sensor_temp": 300,
-    "sensor_humidity": 2,
-    "sensor_co2": 1
-}
-
 # Application State Data
 app_state = {
     "state": "OFF",
@@ -33,6 +16,11 @@ app_state = {
     "longitude": 0,
     "gemini_insights": "a"
 }
+
+def inject_state(acu, local):
+    global acu_data, local_data
+    acu_data = acu
+    local_data = local
 
 # Fetch first set of data
 async def init_app_state():
