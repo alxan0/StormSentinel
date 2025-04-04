@@ -4,7 +4,7 @@ from core.wifi import init_wifi
 from core.display import init_display
 from services.display_service import show_boot_screen
 import services.sensors.sensors_manager as sensors_manager
-import utils.display_manager as display_manager
+import services.display_manager as display_manager
 import utils.website as website
 import config.secrets as secrets
 
