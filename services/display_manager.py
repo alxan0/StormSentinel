@@ -1,24 +1,49 @@
 import asyncio
-from services.display_service import show_readings, clear_screen
+from services.display_service import (
+    clear_screen,
+    show_error_screen,
+    show_accuweather_screen,
+    show_local_sensor_screen,
+    show_summary_screen
+)
 
 def inject_state(acu, local):
     global acu_data, local_data
     acu_data = acu
     local_data = local
 
+error_state = {
+    "msg": "None",
+    "type": ""
+} 
+
+def set_display_error(msg, type):
+    error_state["msg"] = msg
+    error_state["type"] = type
+
+def clear_display_error():
+    error_state["msg"] = "None"
+    error_state["type"] = ""
+
+
 async def display_loop(tft):
+
+    screen_index = 0
+    screens = [
+        show_accuweather_screen,
+        show_local_sensor_screen,
+        show_summary_screen
+    ]
+
     while True:
         clear_screen(tft)
-        show_readings(tft, "Storm Sentinel", 0, 0)
 
-        # === AccuWeather Section ===
-        show_readings(tft, "AccuWeather:", 0, 20)
-        show_readings(tft, f"T: {acu_data.get('acu_temp', '--')}C", 10, 35)
-        show_readings(tft, f"H: {acu_data.get('acu_humidity', '--')}%", 10, 50)
+        if error_state["msg"] is not "None":
+            show_error_screen(tft, error_state["msg"], error_state["type"])
+        else:
+            current_screen = screens[screen_index]
+            current_screen(tft, acu_data, local_data)
 
-        # === Local Sensor Section ===
-        show_readings(tft, "Local Sensors:", 0, 70)
-        show_readings(tft, f"T: {local_data.get('sensor_temp', '--')}C", 10, 85)
-        show_readings(tft, f"CO2: {local_data.get('sensor_co2', '--')}ppm", 10, 100)
+            screen_index = (screen_index + 1) % len(screens)
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(6)
