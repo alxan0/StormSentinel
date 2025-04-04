@@ -30,9 +30,9 @@ async def display_loop(tft):
 
     screen_index = 0
     screens = [
+        show_summary_screen,
         show_accuweather_screen,
-        show_local_sensor_screen,
-        show_summary_screen
+        show_local_sensor_screen
     ]
 
     while True:
