@@ -10,7 +10,7 @@ It also monitors air quality and alerts you if CO₂ levels become unsafe.
 
 ### Features
 
-📡 Wi-Fi-enabled with Raspberry Pi Pico W  
+📡 Wi-Fi-enabled with Raspberry Pi Pico 2W  
 🌡️ Indoor sensor readings:
 - Temperature
 - Humidity
@@ -24,7 +24,7 @@ It also monitors air quality and alerts you if CO₂ levels become unsafe.
 
 ### Technologies & Components
 
-**Hardware:** Raspberry Pi Pico W, DHT22 (temperature and humidity), MH-Z19B (CO₂ sensor), GP2Y1010AU0F (dust sensor), ST7735 TFT display  
+**Hardware:** Raspberry Pi Pico 2W, DHT22 (temperature and humidity), MH-Z19B (CO₂ sensor), GP2Y1010AU0F (dust sensor), ST7735 TFT display  
 **Languages:** MicroPython (with asyncio)  
 **Frontend:** HTML/CSS served directly from the Pico  
 **APIs:**
@@ -52,7 +52,7 @@ password = "your_wifi_password"
 ACU_API_KEY = "your_accuweather_api_key"
 AI_API_KEY = "your_google_gemini_api_key"
 ```
-Flash main.py to your Pico W and reboot.
+Flash main.py to your Pico 2W and reboot.
 
 ### Dependencies
 - [boochow/MicroPython-ST7735](https://github.com/boochow/MicroPython-ST7735) - ST7735 TFT display driver
