@@ -56,4 +56,5 @@ Flash main.py to your Pico 2W and reboot.
 
 ### Dependencies
 - [boochow/MicroPython-ST7735](https://github.com/boochow/MicroPython-ST7735) - ST7735 TFT display driver
+- [UedaTakeyuki/mh-z19](https://github.com/UedaTakeyuki/mh-z19) - MH-Z19B driver
 
