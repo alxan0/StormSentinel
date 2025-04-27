@@ -1,25 +1,11 @@
 from machine import UART, Pin
-import time
+from lib.mh_z19 import MH_Z19
+import utime
 
-# Setează UART (verifică pinii tăi pentru placa ta)
-uart = UART(1, baudrate=9600, tx=Pin(4), rx=Pin(5))
+# UART Pins 
+UART_TX_PIN = 16  # Pico TX --> Sensor RX
+UART_RX_PIN = 17  # Pico RX <-- Sensor TX
 
 def read_co2():
-    cmd = b'\xFF\x01\x86\x00\x00\x00\x00\x00\x79'  # comandă standard de citire CO₂
-    uart.write(cmd)
-    time.sleep(0.1)
-    if uart.any():
-        response = uart.read(9)
-        if response and response[0] == 0xFF and response[1] == 0x86:
-            co2 = response[2] * 256 + response[3]
-            return co2
-    return None
-
-# Buclă de citire CO₂
-while True:
-    co2 = read_co2()
-    if co2:
-        print("CO₂:", co2, "ppm")
-    else:
-        print("Eroare la citire sau senzor inactiv.")
-    time.sleep(2)
+    sensor_co2 = MH_Z19(Pin(UART_TX_PIN), Pin(UART_RX_PIN))
+    return sensor_co2.read_co2()

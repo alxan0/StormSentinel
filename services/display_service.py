@@ -94,6 +94,8 @@ def show_error_screen(tft, message, error_type="Error"):
         title_color = TFT.BLUE
     elif error_type == "Sensor Error":
         title_color = TFT.GREEN
+    elif error_type == "High CO2":
+        title_color = TFT.RED
     elif error_type == "API Error":
         title_color = TFT.PURPLE
 
@@ -101,6 +103,24 @@ def show_error_screen(tft, message, error_type="Error"):
     tft.text((10, 105), message, TFT.YELLOW, sysfont, 1)
 
 
+def co2_label(ppm):
+    if ppm == "--" or not ppm:
+        return "--", TFT.WHITE
+
+    try:
+        ppm_int = int(ppm)
+    except ValueError:
+        print(f"Warning: Could not convert '{ppm}' to int in co2_label")
+        return "--", TFT.WHITE
+
+    if ppm_int < 800:
+        return "Good", TFT.GREEN
+    elif ppm_int < 1000:
+        return "OK", TFT.YELLOW
+    elif ppm_int < 2000:
+        return "Poor", TFTColor(255, 165, 0)
+    else:
+        return "Dangerous", TFT.RED
 
 def show_summary_screen(tft, acu_data, local_data):
     show_readings(tft, "Storm Sentinel", 0, 0, color=TFT.YELLOW)
@@ -113,7 +133,12 @@ def show_summary_screen(tft, acu_data, local_data):
     # === Local Sensor Section ===
     show_readings(tft, "Local Sensors:", 0, 70)
     show_readings(tft, f"T: {format_val(local_data.get('sensor_temp'), 'C')}", 10, 85)
-    show_readings(tft, f"CO2: {format_val(local_data.get('sensor_co2'), 'ppm')}", 10, 100)
+
+    co2_str = format_val(local_data.get('sensor_co2'), 'ppm')
+    show_readings(tft, f"CO2: {co2_str}", 10, 100)
+
+    co2_index, co2_index_color = co2_label(co2_str[:-3])
+    show_readings(tft, co2_index, 10, 115, color=co2_index_color)
 
 
 def show_accuweather_screen(tft, acu_data, _):
@@ -129,5 +154,11 @@ def show_local_sensor_screen(tft, _, local_data):
     show_readings(tft, "Local Sensors", 0, 0, color=TFT.GREEN)
     show_readings(tft, f"Temp: {format_val(local_data.get('sensor_temp'), 'C')}", 10, 30)
     show_readings(tft, f"Humidity: {format_val(local_data.get('sensor_humidity'), '%')}", 10, 45)
-    show_readings(tft, f"CO2: {format_val(local_data.get('sensor_co2'), 'ppm')}", 10, 60)
-    show_readings(tft, f"Dust: {format_val(local_data.get('sensor_dust'), ' µg/m³')}", 10, 75)
+
+    co2_str = format_val(local_data.get('sensor_co2'), 'ppm')
+    show_readings(tft, f"CO2: {co2_str}", 10, 60)
+
+    co2_index, co2_index_color = co2_label(co2_str[:-3])
+    show_readings(tft, co2_index, 10, 75, color=co2_index_color)
+
+    show_readings(tft, f"Dust: {format_val(local_data.get('sensor_dust'), ' µg/m³')}", 10, 90)
