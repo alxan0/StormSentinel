@@ -2,7 +2,7 @@
     font-family: Arial, sans-serif;
   }
   
-body {
+  body {
     background-color: #f0f2f5;
     color: #333;
     margin: 0;
@@ -10,16 +10,16 @@ body {
     box-sizing: border-box;
   }
   
-/* Flex container for main interface and controls */
-.interface-wrapper {
+  /* Flex container for main interface and controls */
+  .interface-wrapper {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
   }
   
-/* Weather station container */
-.weather-container {
+  /* Weather station container */
+  .weather-container {
     flex: 1 1 600px;
     max-width: 800px;
     background: #fff;
@@ -29,55 +29,63 @@ body {
     text-align: center;
   }
   
-/* Controls container styling */
-.controls-container {
-    flex: 0 0 260px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-  
-/* Section styling for weather data */
-.section {
+  /* Section styling for weather data */
+  .section {
     margin-top: 20px;
     padding: 20px;
     border-radius: 15px;
     background-color: #e3f2fd;
     border: 2px solid #2196F3;
-}
+  }
   
-/* Shared styles for both panels */
-.coordinates-memory,
-.led-control {
+  /* Controls container styling */
+  .controls-container {
+    flex: 0 0 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Shared styles for both panels */
+  .settings-panel,
+  .led-control {
     background-color: #fff;
     border: 2px solid #2196F3;
     border-radius: 12px;
     padding: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+  }
   
-/* Form styling within panels */
-.coordinates-memory form,
-.led-control form {
+  /* Settings panel header styling */
+  .settings-panel h2 {
+    margin: 0 0 15px 0;
+    color: #2196F3;
+    font-size: 20px;
+  }
+  
+  /* Form styling within panels */
+  .settings-panel form,
+  .led-control form {
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-.coordinates-memory form + form,
-.led-control form + form {
+  }
+  
+  /* Spacing between stacked forms */
+  .settings-panel form + form,
+  .led-control form + form {
     margin-top: 10px;
-}
-
-/* Input text styling */
-.coordinates-memory input[type="text"],
-.led-control input[type="text"] {
+  }
+  
+  /* Input text styling */
+  .settings-panel input[type="text"] {
     border: 2px solid #2196F3;
     border-radius: 12px;
     padding: 8px;
-}
+  }
   
-/* Generic submit button styling */
-input[type="submit"] {
+  /* Generic submit button styling */
+  input[type="submit"] {
     background-color: #2196F3;
     color: #fff;
     border: none;
@@ -87,21 +95,71 @@ input[type="submit"] {
     font-size: 16px;
     cursor: pointer;
     transition: background 0.3s ease;
-}
+  }
   
-input[type="submit"]:hover {
+  input[type="submit"]:hover {
     background-color: #1976D2;
-}
+  }
   
-.led-control input[type="submit"] {
+  .led-control input[type="submit"] {
     padding: 12px 24px;
-}
+  }
   
-p {
+  p {
     margin-top: 10px;
     background-color: #E3F2FD;
     padding: 8px;
     border-radius: 12px;
     border: 1px solid #2196F3;
-}
+  }
   
+  /* Settings Tabs styling */
+  .settings-tabs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  
+  .tab-btn {
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    flex: 1;
+    text-align: center;
+    min-width: 120px;
+  }
+  
+  .tab-btn:hover {
+    background-color: #1976D2;
+  }
+  
+  .tab-btn.active {
+    background-color: #1976D2;
+  }
+  
+  .tab-content {
+    display: none;
+    padding: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #fff;
+    border: 2px solid #2196F3;
+    border-radius: 12px;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  /* Tab section titles */
+  .tab-content h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #2196F3;
+  }

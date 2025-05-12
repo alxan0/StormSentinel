@@ -33,7 +33,7 @@ It also monitors air quality and alerts you if CO₂ levels become unsafe.
 
 ### 📸 Screenshots (TODO)
 
-![Web UI]()
+![Web UI](web_ui.png)
 ![TFT Display]()
 
 ### Setup

@@ -8,6 +8,15 @@ import services.display_manager as display_manager
 import utils.website as website
 import config.secrets as secrets
 
+# Application state
+app_state = {
+    "led_state": "OFF",
+    "air_quality_warning": "ON",
+    "latitude": 0,
+    "longitude": 0,
+    "gemini_insights": ""
+}
+
 # AcuWeather Data
 acu_data = {
     "acu_temp": 300,
@@ -38,12 +47,12 @@ async def main():
         print('Exiting program.')
         return
     
-    sensors_manager.inject_state(local_data)
+    sensors_manager.inject_state(app_state, local_data)
     asyncio.create_task(sensors_manager.read_all_loop())
 
     # Later update readings
     # Get a first set of data
-    website.inject_state(acu_data, local_data)
+    website.inject_state(app_state, acu_data, local_data)
     await website.init_app_state() # TODO add error check
 
     # Start the server and run the event loop

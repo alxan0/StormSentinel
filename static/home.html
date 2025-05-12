@@ -15,23 +15,22 @@
 
       <div class="section">
         <h2>Sensors Reading</h2>
-        <p>Temperature: {{sensor_temp}}°C</p>
-        <p>Humidity: {{sensor_humidity}}%</p>
-        <p>CO2 Levels: {{sensor_co2}} ppm</p>
-        <p>Dust Concentration: {{sensor_dust}} µg/m³</p>
+        <p id="sensor-temp">Temperature: {{sensor_temp}}°C</p>
+        <p id="sensor-humidity">Humidity: {{sensor_humidity}}%</p>
+        <p id="sensor-co2">CO2 Levels: {{sensor_co2}} ppm</p>
+        <p id="sensor-dust">Dust Concentration: {{sensor_dust}} µg/m³</p>
       </div>
 
       <div class="section">
         <h2>AcuWeather</h2>
         <p>Temperature: {{acu_temp}}°C</p>
         <p>Weather Condition: {{acu_condition}}</p>
-        <p>Humidity: {{acu_humidity}}%</p>        
-        <p>Wind Speed: {{acu_wind_speed}} km/h</p>        
-        <p>Chance of Rain: {{acu_chance_of_rain}}%</p>    
-        <p>Precipitation Type: {{acu_precipitation_type}}</p> 
-
+        <p>Humidity: {{acu_humidity}}%</p>
+        <p>Wind Speed: {{acu_wind_speed}} km/h</p>
+        <p>Chance of Rain: {{acu_chance_of_rain}}%</p>
+        <p>Precipitation Type: {{acu_precipitation_type}}</p>
         <form action="./getweather">
-          <input type="submit" value="Get Weather" />
+          <input type="submit" value="Get Weather">
         </form>
       </div>
 
@@ -39,33 +38,83 @@
         <h2>Gemini</h2>
         <p>AI Insights: {{gemini_insights}}</p>
         <form action="./getinsight">
-          <input type="submit" value="Get Insights" />
+          <input type="submit" value="Get Insights">
         </form>
       </div>
     </div>
 
-    <!-- Controls: Coordinates and LED Control -->
+    <!-- Controls: Settings and LED -->
     <div class="controls-container">
-      <div class="coordinates-memory">
-        <h2>Coordinates</h2>
-        <form action="./savecoordinates" method="get">
+      <div class="settings-panel">
+        <h2>Settings</h2>
+        <div class="settings-tabs">
+          <button class="tab-btn active" data-tab="basic">Basic</button>
+          <button class="tab-btn" data-tab="advanced">Advanced</button>
+        </div>
+
+        <div class="tab-content active" id="basic">
+          <h3>Location</h3>
+          <form action="./savecoordinates" method="get">
             <input type="text" name="latitude" placeholder="{{latitude}}" required>
             <input type="text" name="longitude" placeholder="{{longitude}}" required>
             <input type="submit" value="Save Coordinates">
           </form>
+        </div>
+
+        <div class="tab-content" id="advanced">
+          <h3>Air Quality Warning</h3>
+          <p class="status-indicator">Status: {{air_quality_warning}}</p>
+          <form action="./disableairqualitywarnings">
+            <input type="submit" value="Disable Air Quality Warnings">
+          </form>
+          <form action="./enableairqualitywarnings">
+            <input type="submit" value="Enable Air Quality Warnings">
+          </form>
+        </div>
       </div>
 
       <div class="led-control">
         <h2>LED Control</h2>
         <form action="./lighton">
-          <input type="submit" value="Light On" />
+          <input type="submit" value="Light On">
         </form>
         <form action="./lightoff">
-          <input type="submit" value="Light Off" />
+          <input type="submit" value="Light Off">
         </form>
-        <p>LED state: {{state}}</p>
+        <p>LED state: {{led_state}}</p>
       </div>
     </div>
+
   </div>
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Real-time sensor updates
+    async function refreshSensors() {
+      try {
+        const res = await fetch('/sensor-data');
+        if (!res.ok) return;
+        const data = await res.json();
+        document.getElementById('sensor-temp').textContent = `Temperature: ${data.temp}°C`;
+        document.getElementById('sensor-humidity').textContent = `Humidity: ${data.humidity}%`;
+        document.getElementById('sensor-co2').textContent = `CO2 Levels: ${data.co2} ppm`;
+        document.getElementById('sensor-dust').textContent = `Dust Concentration: ${data.dust} µg/m³`;
+      } catch (e) {
+        console.error('Failed to fetch sensor data', e);
+      }
+    }
+
+    // Initial fetch & interval
+    refreshSensors();
+    setInterval(refreshSensors, 5000);
+  </script>
 </body>
 </html>

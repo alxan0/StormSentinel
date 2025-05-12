@@ -1,5 +1,6 @@
 def webpage(
-    state, 
+    led_state,
+    air_quality_warning, 
     latitude, 
     longitude, 
     acu_temp, 
@@ -29,7 +30,9 @@ def webpage(
     html = html.replace("{{acu_chance_of_rain}}", str(acu_chance_of_rain))
     html = html.replace("{{acu_precipitation_type}}", str(acu_precipitation_type)) 
     html = html.replace("{{gemini_insights}}", str(gemini_insights))
-    html = html.replace("{{state}}", str(state))
+    html = html.replace("{{led_state}}", str(led_state))
+    html = html.replace("{{air_quality_warning}}", str(air_quality_warning))
+
 
     if latitude and longitude is not 0:
         html = html.replace("{{latitude}}", str(latitude))

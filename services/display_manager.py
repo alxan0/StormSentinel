@@ -8,7 +8,7 @@ from services.display_service import (
 )
 
 def inject_state(acu, local):
-    global acu_data, local_data
+    global app_state, acu_data, local_data
     acu_data = acu
     local_data = local
 
@@ -44,11 +44,11 @@ async def display_loop(tft):
                 clear_screen(tft)
                 show_error_screen(tft, error_state["msg"], error_state["type"])
         else:
+            clear_screen(tft)
             error_active = 0
             current_screen = screens[screen_index]
             current_screen(tft, acu_data, local_data)
             
-            clear_screen(tft)
             screen_index = (screen_index + 1) % len(screens)
 
         await asyncio.sleep(6)

@@ -8,8 +8,9 @@ from services.display_manager import (
 )
 #from services.sensors.dust_sensor import read_dust
 
-def inject_state(local):
-    global acu_data, local_data
+def inject_state(app, local):
+    global app_state, local_data
+    app_state = app
     local_data = local
 
 TH_CO2_ALERT = 2000     # ppm – trigger when ≥ this value
@@ -44,7 +45,7 @@ async def read_all_loop():
         
         alert_active = error_state["type"] == "High CO2"
 
-        if co2_avg >= TH_CO2_ALERT:
+        if co2_avg >= TH_CO2_ALERT and app_state["air_quality_warning"] is "ON":
             if not alert_active:
                 set_display_error(f"{int(co2_avg)} ppm, Dangerous", "High CO2")
         else:
