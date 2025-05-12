@@ -1,24 +1,26 @@
 from machine import Pin, ADC
-import time
+import uasyncio as asyncio     
+import utime     
 
-# Configurare pini
-led_pin = Pin(15, Pin.OUT)       # controlul LED-ului intern al senzorului
-adc_pin = ADC(26)                # ADC0 pe Raspberry Pi Pico (GPIO26)
+LED_CTL = Pin(20, Pin.OUT)       # internal LED
+ADC_PIN = ADC(28)                # Analog to digital converter pin
+REF_V  = 3.3                     # Pico ADC reference (do not change)
+CONVERSION_FACTOR = 0.000050354  # 3.3 V / 65 535 counts
 
-def read_dust():
-    led_pin.value(1)             # Aprinde LED-ul
-    time.sleep_us(280)          # Așteaptă conform datasheet
-    adc_val = adc_pin.read_u16()  # Citește valoarea ADC (16 biți)
-    time.sleep_us(40)
-    led_pin.value(0)             # Oprește LED-ul
-    time.sleep_ms(10)           # Timp de repaus
-    return adc_val
+# --- one dust sample ------------------------------------------------------
+async def read_dust():    
+    """
+    Return dust concentration in µg/m³, single sample.
+    Timing follows Sharp GP2Y1014AU0F datasheet.
+    """
+    LED_CTL.value(0)              # IR LED ON (active-LOW)
+    utime.sleep_us(280)           # blocking, but only 0.28 ms
+    raw = ADC_PIN.read_u16()      # 12-bit value left-aligned to 16 bits
+    utime.sleep_us(40)            
+    LED_CTL.value(1)              # IR LED OFF
+    await asyncio.sleep_ms(10)
 
-while True:
-    raw = read_dust()
-    voltage = (raw / 65535.0) * 3.3  # Conversie la tensiune (0-3.3V)
-    dust_density = max((voltage - 0.6) / 0.5, 0)  # mg/m³, simplificat
-
-    print("ADC:", raw, "Voltage: {:.2f} V".format(voltage),
-          "Dust density: {:.2f} mg/m³".format(dust_density))
-    time.sleep(1)
+    v_adc = raw * CONVERSION_FACTOR  
+    v_true  = v_adc * 2
+    dust_ugm3 = (v_true - 0.9) / 0.005  
+    return max(dust_ugm3, 0)

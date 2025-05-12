@@ -113,6 +113,7 @@ async def handle_client(reader, writer):
         local_data["sensor_temp"],
         local_data["sensor_humidity"],
         local_data["sensor_co2"],
+        local_data["sensor_dust"],
         app_state["gemini_insights"]
     )
 

@@ -95,9 +95,9 @@ def show_error_screen(tft, message, error_type="Error"):
     elif error_type == "Sensor Error":
         title_color = TFT.GREEN
     elif error_type == "High CO2":
-        title_color = TFT.RED
-    elif error_type == "API Error":
         title_color = TFT.PURPLE
+    elif error_type == "API Error":
+        title_color = TFT.RED
 
     tft.text((10, 80), f"{error_type}", title_color, sysfont, 2)
     tft.text((10, 105), message, TFT.YELLOW, sysfont, 1)
@@ -116,11 +116,11 @@ def co2_label(ppm):
     if ppm_int < 800:
         return "Good", TFT.GREEN
     elif ppm_int < 1000:
-        return "OK", TFT.YELLOW
+        return "OK", TFTColor(255, 165, 0)
     elif ppm_int < 2000:
-        return "Poor", TFTColor(255, 165, 0)
+        return "Poor", TFT.BLUE
     else:
-        return "Dangerous", TFT.RED
+        return "Dangerous", TFT.PURPLE
 
 def show_summary_screen(tft, acu_data, local_data):
     show_readings(tft, "Storm Sentinel", 0, 0, color=TFT.YELLOW)
@@ -161,4 +161,4 @@ def show_local_sensor_screen(tft, _, local_data):
     co2_index, co2_index_color = co2_label(co2_str[:-3])
     show_readings(tft, co2_index, 10, 75, color=co2_index_color)
 
-    show_readings(tft, f"Dust: {format_val(local_data.get('sensor_dust'), ' µg/m³')}", 10, 90)
+    #show_readings(tft, f"Dust: {format_val(local_data.get('sensor_dust'), ' µg/m³')}", 10, 90)

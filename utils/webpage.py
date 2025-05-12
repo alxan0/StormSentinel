@@ -10,7 +10,8 @@ def webpage(
     acu_precipitation_type,  
     sensor_temp, 
     sensor_humidity, 
-    sensor_co2,  
+    sensor_co2,
+    sensor_dust,
     gemini_insights
 ):
     with open("static/home.html", "r") as file:
@@ -20,6 +21,7 @@ def webpage(
     html = html.replace("{{sensor_temp}}", str(sensor_temp))
     html = html.replace("{{sensor_humidity}}", str(sensor_humidity))
     html = html.replace("{{sensor_co2}}", str(sensor_co2))
+    html = html.replace("{{sensor_dust}}", str(sensor_dust))
     html = html.replace("{{acu_temp}}", str(acu_temp))
     html = html.replace("{{acu_condition}}", str(acu_condition))
     html = html.replace("{{acu_humidity}}", str(acu_humidity))        

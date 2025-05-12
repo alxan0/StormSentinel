@@ -12,6 +12,8 @@ def inject_state(acu, local):
     acu_data = acu
     local_data = local
 
+error_active = 0
+
 error_state = {
     "msg": "None",
     "type": ""
@@ -36,14 +38,17 @@ async def display_loop(tft):
     ]
 
     while True:
-        clear_screen(tft)
-
         if error_state["msg"] is not "None":
-            show_error_screen(tft, error_state["msg"], error_state["type"])
+            if not error_active:
+                error_active = 1
+                clear_screen(tft)
+                show_error_screen(tft, error_state["msg"], error_state["type"])
         else:
+            error_active = 0
             current_screen = screens[screen_index]
             current_screen(tft, acu_data, local_data)
-
+            
+            clear_screen(tft)
             screen_index = (screen_index + 1) % len(screens)
 
         await asyncio.sleep(6)
