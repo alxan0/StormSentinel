@@ -17,14 +17,14 @@ app_state = {
     "gemini_insights": ""
 }
 
-# AcuWeather Data
-acu_data = {
-    "acu_temp": 300,
-    "acu_condition": "None",
-    "acu_humidity": 300,
-    "acu_wind_speed": 300,
-    "acu_chance_of_rain": 300,
-    "acu_precipitation_type": "None"
+# AccuWeather Data
+accu_data = {
+    "accu_temp": 300,
+    "accu_condition": "None",
+    "accu_humidity": 300,
+    "accu_wind_speed": 300,
+    "accu_chance_of_rain": 300,
+    "accu_precipitation_type": "None"
 }
 
 # Local Sensor Data
@@ -39,7 +39,7 @@ async def main():
 
     tft = init_display() # TODO add error check
     show_boot_screen(tft)
-    display_manager.inject_state(acu_data, local_data)
+    display_manager.inject_state(accu_data, local_data)
     asyncio.create_task(display_manager.display_loop(tft))
 
     if not init_wifi(secrets.ssid, secrets.password):
@@ -52,7 +52,7 @@ async def main():
 
     # Later update readings
     # Get a first set of data
-    website.inject_state(app_state, acu_data, local_data)
+    website.inject_state(app_state, accu_data, local_data)
     await website.init_app_state() # TODO add error check
 
     # Start the server and run the event loop

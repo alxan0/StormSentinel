@@ -18,17 +18,17 @@
         <p id="sensor-temp">Temperature: {{sensor_temp}}°C</p>
         <p id="sensor-humidity">Humidity: {{sensor_humidity}}%</p>
         <p id="sensor-co2">CO2 Levels: {{sensor_co2}} ppm</p>
-        <p id="sensor-dust">Dust Concentration: {{sensor_dust}} µg/m³</p>
+        <!-- <p id="sensor-dust">Dust Concentration: {{sensor_dust}} µg/m³</p> -->
       </div>
 
       <div class="section">
-        <h2>AcuWeather</h2>
-        <p>Temperature: {{acu_temp}}°C</p>
-        <p>Weather Condition: {{acu_condition}}</p>
-        <p>Humidity: {{acu_humidity}}%</p>
-        <p>Wind Speed: {{acu_wind_speed}} km/h</p>
-        <p>Chance of Rain: {{acu_chance_of_rain}}%</p>
-        <p>Precipitation Type: {{acu_precipitation_type}}</p>
+        <h2>AccuWeather</h2>
+        <p>Temperature: {{accu_temp}}°C</p>
+        <p>Weather Condition: {{accu_condition}}</p>
+        <p>Humidity: {{accu_humidity}}%</p>
+        <p>Wind Speed: {{accu_wind_speed}} km/h</p>
+        <p>Chance of Rain: {{accu_chance_of_rain}}%</p>
+        <p>Precipitation Type: {{accu_precipitation_type}}</p>
         <form action="./getweather">
           <input type="submit" value="Get Weather">
         </form>

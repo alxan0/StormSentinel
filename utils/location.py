@@ -4,7 +4,7 @@ COORDINATES_FILE = "location.json"
 
 async def save_coordinates(coordinates):
     try:
-        from services.acuweather import get_location_key
+        from services.accuweather import get_location_key
         print(">>>>>>>>>test")
         coordinates["location_key"] = await get_location_key(coordinates.get("latitude"), coordinates.get("longitude"))
         with open(COORDINATES_FILE, "w") as file:

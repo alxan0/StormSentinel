@@ -3,7 +3,7 @@ import socket
 import ujson as json
 from machine import Pin
 from utils.webpage import webpage
-from services.acuweather import get_weather
+from services.accuweather import get_weather
 from services.geminiAsk import ask_gemini
 from utils.location import save_coordinates, load_coordinates
 

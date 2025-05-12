@@ -14,7 +14,7 @@ async def ask_gemini(acu_data):
         f" Umiditate de {acu_data['acu_humidity']}% si vant de "
         f"{acu_data['acu_wind_speed']} km/h. "
         f"Sanse de ploaie {acu_data['acu_chance_of_rain']}%."
-        f" Spune-mi in maxim 30 de cuvinte cum sa ma imbrac."
+        f" Spune-mi in maxim 50 de cuvinte cum sa ma imbrac."
     )
     try:
         headers = {

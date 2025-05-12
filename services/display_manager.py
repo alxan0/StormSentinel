@@ -7,9 +7,9 @@ from services.display_service import (
     show_summary_screen
 )
 
-def inject_state(acu, local):
-    global app_state, acu_data, local_data
-    acu_data = acu
+def inject_state(accu, local):
+    global app_state, accu_data, local_data
+    accu_data = accu
     local_data = local
 
 error_active = 0
@@ -47,7 +47,7 @@ async def display_loop(tft):
             clear_screen(tft)
             error_active = 0
             current_screen = screens[screen_index]
-            current_screen(tft, acu_data, local_data)
+            current_screen(tft, accu_data, local_data)
             
             screen_index = (screen_index + 1) % len(screens)
 

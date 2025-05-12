@@ -49,7 +49,7 @@ ssid = "your_wifi_name"
 password = "your_wifi_password"
 
 # API keys
-ACU_API_KEY = "your_accuweather_api_key"
+ACCU_API_KEY = "your_accuweather_api_key"
 AI_API_KEY = "your_google_gemini_api_key"
 ```
 Flash main.py to your Pico 2W and reboot.

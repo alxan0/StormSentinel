@@ -1,7 +1,7 @@
 import asyncio
 import urequests
 import json
-from config.secrets import ACU_API_KEY as API_KEY
+from config.secrets import ACCU_API_KEY as API_KEY
 from utils.location import load_coordinates
 
 # Get the location key from coordinates
