@@ -12,7 +12,7 @@ def inject_state(accu, local):
     accu_data = accu
     local_data = local
 
-error_active = 0
+error_active = 0 ## TODO rethink it
 
 error_state = {
     "msg": "None",
@@ -39,13 +39,10 @@ async def display_loop(tft):
 
     while True:
         if error_state["msg"] is not "None":
-            if not error_active:
-                error_active = 1
                 clear_screen(tft)
                 show_error_screen(tft, error_state["msg"], error_state["type"])
         else:
             clear_screen(tft)
-            error_active = 0
             current_screen = screens[screen_index]
             current_screen(tft, accu_data, local_data)
             

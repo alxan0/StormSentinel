@@ -1,5 +1,4 @@
 import asyncio
-from utime import sleep
 from core.wifi import init_wifi
 from core.display import init_display
 from services.display_service import show_boot_screen
@@ -72,6 +71,6 @@ try:
     # Run the event loop indefinitely
     loop.run_forever()
 except Exception as e:
-    print('Error occured: ', e)
+    print('Error occurred: ', e)
 except KeyboardInterrupt:
     print('Program Interrupted by the user')
