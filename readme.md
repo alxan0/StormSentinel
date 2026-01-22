@@ -34,7 +34,7 @@ It also monitors air quality and alerts you if CO₂ levels become unsafe.
 ### 📸 Screenshots (TODO)
 
 ![Web UI](web_ui.png)
-![TFT Display]()
+![Fritzing diagram](StormSentinel_bb.png)
 
 ### Setup
 
