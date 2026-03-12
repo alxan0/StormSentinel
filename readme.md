@@ -40,7 +40,7 @@ It also monitors air quality and alerts you if CO₂ levels become unsafe.
 
 Clone this repository:
 ```
-git clone https://github.com/your-username/storm-sentinel.git
+git clone https://github.com/alxan0/storm-sentinel.git
 ```
 Configure Wi-Fi and API in config/secrets.py:
 ```py
